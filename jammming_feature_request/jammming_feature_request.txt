@@ -1,0 +1,28 @@
+Pressing Enter Triggers Search
+February 3th 2019
+
+
+OBJECTIVE
+Pressing enter while the search bar text field is focused will trigger a search. This type of functionality is known as implicit submission. 
+BACKGROUND 
+Search fields across most major websites allow implicit submission, causing many users to expect implicit submission to work automatically. Additionally, this is significantly more convenient for the user, as they can trigger a search without taking their hands off the keyboard. Accessibility is also improved by allowing implicit submission since it is crucial for assistive technologies and impaired users who cannot move the mouse. To quote the HTML5 specification: “There are pages on the Web that are only usable if there is a way to implicitly submit forms, so user agents [browsers] are strongly encouraged to support this.”. As such, adding this functionality to Jammming would be highly beneficial. 
+TECHNICAL DESIGN
+To implement this feature, we simply need to add a enterPressed() method to our SearchBar component. This should take an event as a parameter and check if its .keyCode or .which is 13 (the code for the enter key). If it is, then it should call the handleSearch() function. This should be added as an event listener to the <input> element. 
+An example of how this may be implemented would be: 
+enterPressed(event) {
+        const code = event.keyCode || event.which;
+        if(code === 13) {
+            this.handleSearch();
+        }}
+.......
+render() {
+        return (<div className="SearchBar">
+            <input placeholder="Enter A Song Title" onChange={this.handleChange} onKeyDown={this.enterPressed} />
+.......
+)}
+
+
+Implementation of this feature using the above method can be found at https://github.com/AodenTeo/jammming.git.
+CAVEATS
+Another way this could be achieved is using the built-in support for this in HTML5 with the <form> element, which accomplishes this by triggering a click event on the first Submit button when enter is pressed. However, this would arguably be a more complex solution to the problem, as the suggested approach only requires the addition of a single method to SearchBar element, while the alternative would require making significant amounts of the functionality over to HTML. This will likely make the project unnecessarily more complex and hence was not the chosen solution.
+Drawbacks of the proposed solution may include decreased performance, since the event listener attached to the input function must check every input, however, this performance decrease will be insignificant.
